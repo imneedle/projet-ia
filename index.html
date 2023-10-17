@@ -4,13 +4,15 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>Projet IA</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css">
         <style>
             *, *::after, *::before {
                 font-size: 10px;
-                font-family: sans-serif;
+                font-family: 'Computer Modern Serif' ,cursive, sans-serif;
                 margin: 0;
                 padding: 0;
                 line-height: 1;
+                font-style: italic;
             }
 
             .heading__primary {
@@ -27,12 +29,21 @@
     <body>
         <h1 class="heading__primary">Projet IA</h1>
         <h2 class="heading__primary">La question étudiée</h2>
-        <p class="text__primary">Arthur a toi de jouer</p>
-        <h2 class="heading__primary">Les données utilisées</h2>
-        <p class="text__primary">Arthurrrr</p>
+        <p class="text__primary">La pollution de l'air est un enjeu important dans un grand nombre de villes, comme par exemple Grenoble. Différents indicateurs existent, et certains peuvent être prédits à l'avance par intelligence artificielle. Cependant, ces expériences n'existent que pour certaines villes spécifiques. Elles ne prennent aussi en compte qu'un indicateur (particules fines (1), oxides d'azote, ozone, monoxyde de carbone (2)...) et non pas un aggrégat de ces indicateurs (comme l'indice ATMO).
+
+
+        Nous cherchons donc à prévoir la qualité de l'air dans une ville donnée à court terme, selon les prévisions météo et les indicateurs de qualité de l'air actuelles. Si possible, nous aimerions réaliser cette expérience avec des données sur les tailles et autres données des villes, afin de créer un modèle général.</p>
+        <h2 class="heading__primary">Données utilisées</h2>
+        <p class="text__primary">L'utilisation des données météo ainsi que des particules fines en amont du vent ont permis de donner des bons résultats pour Louisville (1). Nous souhaiterions donc élargir ces données aux autres polluants.
+        Les données de qualité de l'air sont disponibles sur le site de l'ATMO (https://www.atmo-auvergnerhonealpes.fr/monair/commune/38000). Nous avons aussi trouvé des données sur les tailles des villes (https://www.insee.fr/fr/statistiques/4265429?sommaire=4265511#consulter-sommaire).
+        Pour la météo, nous pouvons utiliser les données de l'API OpenWeatherMap (https://openweathermap.org/api).</p>
         <h2 class="heading__primary">Les méthodes à utiliser</h2>
-        <p class="text__primary">Arthurrrr</p>
+        <p class="text__primary">Nous sommes confrontés à un problème de régression. Plusieurs démarches sont possibles. Puisque les recherches bibliographiques n'ont pas trouvé de meilleure approche, nous avons décidé d'essayer plusieurs stratégies : k-NN, Régression non-linéaire, régression logistique, ...</p>
         <h2 class="heading__primary">Réflexions sur les enjeux environnementaux et sociétaux</h2>
         <p class="text__primary">Arthurrrr</p>
+
+        <h2 class="heading__primary">Références</h2>
+        <a href="https://www.sciencedirect.com/science/article/abs/pii/S1352231010003821">1</a> (mets plutot le nom que le lien)
+        <a href="https://www.ijstr.org/final-print/mar2020/Air-Quality-Prediction-Through-Regression-Model.pdf">2</a>
     </body>
 </html>
