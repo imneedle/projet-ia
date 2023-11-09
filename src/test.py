@@ -1,4 +1,4 @@
-#!/usr/bien/env python3
+#!/usr/bin/env python3
 
 from math import radians, asin, sin, cos, atan2, degrees
 
@@ -16,7 +16,7 @@ def calculate_new_position(current_lat, current_lon, wind_speed, wind_direction,
     # Calculate the distance traveled in the given time interval
     distance = (wind_speed * time_interval)
 
-    # Calculate the new latitude and longitude
+    # Calculate the new latitude and longitude using azimuth formula
     lat2 = asin(sin(lat1) * cos(distance / R) + cos(lat1) * sin(distance / R) * cos(wind_direction_rad))
     lon2 = lon1 + atan2(sin(wind_direction_rad) * sin(distance / R) * cos(lat1), cos(distance / R) - sin(lat1) * sin(lat2))
     
