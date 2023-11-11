@@ -8,102 +8,103 @@
       rel="stylesheet"
       type="text/css"
       href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css"
-      />
+    />
     <style>
       *,
       *::after,
       *::before {
-      font-size: 10px;
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-      color: #1e1e1e;
-      box-sizing: border-box;
+        font-size: 10px;
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        color: #1e1e1e;
+        box-sizing: border-box;
+      }
+      body {
+        margin-bottom: 10em;
       }
       .heading__primary {
-      font-size: 2.4rem;
-      font-weight: bold;
-      margin: 2rem 1rem 1rem;
-      padding: 0 4rem 0;
-      text-transform: uppercase;
+        font-size: 2.4rem;
+        font-weight: bold;
+        margin: 2rem 4rem 1rem;
+        padding: 0 4rem 0;
+        text-transform: uppercase;
       }
       .text__primary {
-      font-size: 1.6rem;
-      line-height: 1.3;
-      padding: 2rem 5rem 0;
+        font-size: 1.6rem;
+        line-height: 1.3;
+        padding: 2rem 8rem 0;
       }
-      .text__primary strong {
+      .text__primary strong,
+      .item strong,
+      .text__primary em,
+      .text__primary code {
         font-size: 1.6rem;
       }
-      /* .link { */
-      /* font-size: 1.6rem; */
-      /* color: blue */
-      /* } */
-      /* .link.small { */
-      /* font-size: 1rem; */
-      /* } */
-      /* .link:hover { */
-      /* text-decoration: none; */
-      /* } */
+      .text__primary code {
+        font-family: monospace;
+      }
       .link {
-        text-decoration: none; /* Remove underline */
-        color: #007bff; /* Set link color */
-        transition: color 0.3s; /* Add smooth color transition on hover */
+        text-decoration: none;
+        color: #007bff;
+        transition: color 0.3s;
         font-size: 1.6rem;
       }
       .link.small {
         font-size: 1rem;
       }
       .link:hover {
-        color: #ff6600; /* Change link color on hover */
+        color: #ff6600;
         text-decoration: underline;
       }
       .link:focus {
-        outline: none; /* Remove focus outline on click for accessibility */
+        outline: none;
       }
       .list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: -1rem;
-      padding: 2rem 7rem 0;
-      font-size: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: -1rem;
+        padding: 2rem 10rem 0;
+        font-size: 1.6rem;
       }
       .item {
-      font-size: inherit
+        font-size: inherit;
       }
       .references-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin: 0 3rem;
-      list-style: none; /* Remove default list numbering */
-      padding: 2rem 5rem;
-      font-size: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 0 3rem;
+        list-style: none;
+        padding: 2rem 5rem;
+        font-size: 1.6rem;
       }
       .references-list li {
-      counter-increment: reference; /* Increment the counter for each list item */
-      position: relative;
-      font-size: 1.6rem;
+        counter-increment: reference;
+        position: relative;
+        font-size: 1.6rem;
       }
       .references-list li::before {
-      content: "[" counter(reference) "] "; /* Display the counter in square brackets */
-      font-weight: bold; /* Make the counter bold */
-      font-size: 1.6rem;
-      margin-right: 5px; /* Add some spacing between the counter and the text */
-      position: absolute;
-      left: -25px; /* Adjust the left position as needed */
+        content: "[" counter(reference) "] ";
+        font-weight: bold;
+        font-size: 1.6rem;
+        margin-right: 5px;
+        position: absolute;
+        left: -25px;
       }
       .cool-heading {
-        font-family: 'Arial', sans-serif;
+        font-family: "Arial", sans-serif;
         font-size: 3rem;
         color: #007bff;
         text-align: center;
         margin: 2rem 0 4rem;
         position: relative;
         cursor: pointer;
-        transition: color 0.3s, transform 0.3s;
+        transition:
+          color 0.3s,
+          transform 0.3s;
       }
       .cool-heading:hover {
         color: #ff6600;
@@ -111,22 +112,25 @@
         animation: bounce 0.5s ease infinite;
       }
       @keyframes bounce {
-        0%, 100% {
-          transform: translateY(0) scale(1.0);
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
         }
         50% {
           transform: translateY(-10px) scale(1.2);
         }
       }
       .modern-heading {
-        font-family: 'Arial', sans-serif;
+        font-family: "Arial", sans-serif;
         font-size: 2.5rem;
         color: #007bff;
         text-align: center;
         margin-top: 100px;
         position: relative;
         cursor: pointer;
-        transition: color 0.3s, transform 0.3s;
+        transition:
+          color 0.3s,
+          transform 0.3s;
       }
 
       .modern-heading:hover {
@@ -147,128 +151,90 @@
   </head>
   <body>
     <h1 class="modern-heading">Projet IA</h1>
-    <h1 class="cool-heading">Neil Desplats &mdash; Arthur Pinto Rosa &mdash; Hadrien Eyraud</h1>
-    <h2 class="heading__primary">La question étudiée</h2>
+    <h1 class="cool-heading">
+      Neil Desplats &mdash; Arthur Pinto Rosa &mdash; Hadrien Eyraud
+    </h1>
+    <h1 class="modern-heading">Prédiction de la qualité de l'air</h1>
+    <h2 class="heading__primary">Jeu de données</h2>
     <p class="text__primary">
-      La pollution de l'air est un enjeu important dans un grand nombre de
-      villes, comme par exemple Grenoble. Différents indicateurs existent, et
-      certains peuvent être prédits à l'avance par intelligence artificielle.
-    </p>
-    <p class="text__primary">
-      Cependant, ces expériences n'existent que pour certaines villes
-      spécifiques. Elles ne prennent aussi en compte qu'un indicateur
-      (particules fines<sup
-        ><a
-        class="link small"
-        target="_blank"
-        href="https://www.sciencedirect.com/science/article/abs/pii/S1352231010003821"
-        >1</a
-        ></sup
-        >, oxides d'azote, ozone, monoxyde de carbone<sup
-        ><a
-        class="link small"
-        target="_blank"
-        href="https://www.ijstr.org/final-print/mar2020/Air-Quality-Prediction-Through-Regression-Model.pdf"
-        >2</a
-        ></sup
-        >) et non pas un aggrégat de ces indicateurs, comme l'indice ATMO par
-      exemple.
-    </p>
-    <p class="text__primary">
-    <strong>Nous cherchons donc à prévoir la qualité de l'air dans une ville donnée à
-      court terme, selon les prévisions météo et les indicateurs de qualité de
-      l'air actuelles</strong>. Si possible, nous aimerions réaliser cette expérience
-      avec des données sur les tailles et autres données des villes, afin de
-      créer un modèle général.
-    </p>
-    <h2 class="heading__primary">Données utilisées</h2>
-    <p class="text__primary">
-      L'utilisation des données météo ainsi que des particules fines en amont du
-      vent ont permis de donner des bons résultats pour Louisville<sup
-        ><a
-        class="link small"
-        target="_blank"
-        href="https://www.sciencedirect.com/science/article/abs/pii/S1352231010003821"
-        >1</a
-        ></sup
-        >.
-    </p>
-    <p class="text__primary">
-      Nous souhaiterions donc élargir ces données aux autres polluants. Les
-      données de qualité de l'air sont disponibles sur le
-      <a
-        class="link"
-        target="_blank"
-        href="https://www.atmo-auvergnerhonealpes.fr/monair/commune/38000"
-        >site de l'ATMO</a
-        >. Nous avons aussi trouvé des
-      <a
-        class="link"
-        href="https://www.insee.fr/fr/statistiques/4265429?sommaire=4265511#consulter-sommaire"
-        target="_blank"
-        >données sur les tailles des villes</a
-        >.
-    </p>
-    <p class="text__primary">
-      Pour la météo, nous pouvons utiliser les données de
-      <a class="link" href="https://openweathermap.org/api" target="_blank"
-        >l'API OpenWeatherMap</a
-        >.
-    </p>
-    <h2 class="heading__primary">Les méthodes à utiliser</h2>
-    <p class="text__primary">
-      Nous sommes confrontés à un problème de régression. Plusieurs démarches
-      sont possibles. Puisque les recherches bibliographiques n'ont pas trouvé
-      de meilleure approche, nous avons décidé d'essayer plusieurs stratégies :
-    <ul class="list">
-      <li class="item"><a target="_blank" class="link" href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">k-nearest neighbors algorithm (k-NN)</a></li>
-      <li class="item"><a target="_blank" class="link" href="https://en.wikipedia.org/wiki/Nonlinear_regression">Régression non-linéaire</a></li>
-      <li class="item"><a target="_blank" class="link" href="https://en.wikipedia.org/wiki/Logistic_regression">Régression logistique</a></li>
-      <li class="item">Éventuellement d'autres approches...</li>
-    </ul>
-    </p>
-    <h2 class="heading__primary">
-      Réflexions sur les enjeux environnementaux et sociétaux
-    </h2>
-    <p class="text__primary">
-      De nombreux domaines sont touchés par la détérioration de la qualité de l'air. Pour
-      n'en citer que quelques uns
+      Nous utilisons 2 API pour obtenir notre jeu de données:
     </p>
     <ul class="list">
-      <li class="item">La santé humaine, avec les effets des particules fines, et plus récemment de particules ultra-fines, sur les
-        poumons.
+      <li class="item">
+        OpenWeatherMap &rarr; <strong>Air Pollution API</strong> :<p class="text__primary">Cette API nous
+        donne accès aux données de pollution historique (jusqu'au 27 Novembre
+        2020) pour une position donnée, heure par heure. Outre l'indice de
+        qualité de l'air de base, l'API renvoie des données sur les gaz
+        polluants tels que le monoxyde de carbone (CO), le monoxyde d'azote
+        (NO), le dioxyde d'azote (NO2), l'ozone (O3), le dioxyde de soufre
+        (SO2), l'ammoniac (NH3) et les particules (PM2,5 et PM10).
+        </p>
       </li>
-      <li class="item">La perturbation des cycles reproductifs et migratoires de
-        certaines espèces, dont l'abondance de la flore environnante, et la
-        nourriture ne cesse de se détériorer
+      <li class="item">
+        OpenMeteo &rarr; <strong>Historical Weather API</strong> : <p class="text__primary">Cette API
+        donne les données météorologiques historiques (remontant jusqu'en
+        Janvier 1940) pour une position donnée. Nous récoltons sur un durée T :
+        <ul class="list">
+          <li class="item">
+            Pour chaque heure : humidité relative à 2m, point de rosée à 2m,
+            moyenne de la couverture nuageuse, vitesse du vent à 80m, direction
+            du vent à 80m, température à 80m.
+          </li>
+          <li class="item">
+            Pour chaque jour : la température maximale et minimale à 2m.
+          </li>
+        </ul>
+        </p>
       </li>
     </ul>
     <p class="text__primary">
-      En tant qu'étudiants à Grenoble, il nous a semblé judicieux de mesurer la
-      qualité de l'air dans cette ville construite dans une cuvette, où la
-      qualité de l'air est une problématique centrale.
+      Ces deux jeux de données utilisent une combinaison d'observations de
+      stations météorologiques, d'aéronefs, de bouées, de radars et de
+      satellites pour créer un enregistrement complet des conditions
+      météorologiques passées. Ces ensembles de données sont capables de combler
+      les lacunes en utilisant des modèles mathématiques pour estimer les
+      valeurs de diverses variables météorologiques. En conséquence, les
+      ensembles de données de réanalyse peuvent fournir des informations
+      météorologiques historiques détaillées pour des emplacements qui
+      n'auraient peut-être pas eu de stations météorologiques à proximité, tels
+      que les zones rurales ou l'océan ouvert.
     </p>
-    <p class="text__primary">Ironiquement, la "Capitale Verte" est 6ème dans le
-      <a href="https://www.alcor-controles.fr/quelles-sont-les-20-villes-polluees/" class="link" target="_blank">classement des villes les plus polluées de France</a>.
-      Lors des récents incendies survenus au Canada, une partie des fumées ont été
-      dirigées vers la ville de New-York. New York affichait alors l'une des
-      pire qualité de l'air métropolitaine mondiale. Il nous a donc semblait
-      intéressant de mettre un outil permettant de prévenir des pics de
-      pollutions comme celui-ci, puisque notre modèle se fonde sur la vitesse et
-      l'orientation du vent. Ces mêmes paramètres qui ont été responsables du
-      brouillard roûgeatre observé à NY pendant cette période.
+    <p class="text__primary">
+      Les modèles pour les données météorologiques historiques utilisent une
+      résolution spatiale de 9 km pour résoudre les détails fins près des côtes
+      ou des terrains montagneux complexes. En général, une résolution spatiale
+      plus élevée signifie que les données sont plus détaillées et représentent
+      plus précisément les conditions météorologiques à des échelles plus
+      petites.
     </p>
-    <h2 class="heading__primary">Références</h2>
-    <ol class="references-list">
-      <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S1352231010003821" class="link" target="_blank">W. Geoffrey Cobourn (2010). An enhanced PM2.5 air quality forecast model based on nonlinear regression and back-trajectory concentrations</a>.</li>
-      <li><a href="https://www.ijstr.org/final-print/mar2020/Air-Quality-Prediction-Through-Regression-Model.pdf" class="link" target=_blank">A.Aarthi, P.Gayathri, N.R.Gomathi , S.Kalaiselvi , Dr.V.Gomathi (2020). Air Quality Prediction Through Regression Model</a></li>
-      <li><a href="https://www.atmo-auvergnerhonealpes.fr/air-commune/non-trouve" class="link" target="_blank">Auvergne-Rhône-Alpes. Site de Atmo</a></li>
-      <li><a href="https://www.insee.fr/fr/statistiques/4265429?sommaire=4265511#consulter-sommaire" class="link" target="_blank">Institut National de la Statistique et des Études Économiques (INSEE). Populations légales 2017</a></li>
-      <li><a href="https://openweathermap.org/api" class="link" target="_blank">OpenWeatherMap API Documentation</a></li>
-      <li><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm" class="link" target="_blank">k-nearest neighbor algorithm</a></li>
-      <li><a href="https://en.wikipedia.org/wiki/Nonlinear_regression" class="link" target="_blank">Nonlinear regression</a></li>
-      <li><a href="https://en.wikipedia.org/wiki/Logistic_regression" class="link" target="_blank">Logistic regression</a></li>
-      <li><a href="https://www.alcor-controles.fr/quelles-sont-les-20-villes-polluees/" class="link" target="_blank">ALCOR Diagnostics (2021). Quelles sont les 20 villes les plus polluées ?</a></li>
-    </ol>
+
+    <h2 class="heading__primary">Traitement des données</h2>
+    <p class="text__primary">
+      Pour le traitement de données nous avons pris une architecture de project
+      très modulaire afin de bien séparé la partie "<em>fetching</em>" des
+      données, de la partie "<em>traitement</em>" des données.
+    </p>
+    <p class="text__primary">
+      Nous avons crée des fetcheurs pour récupérer les données sur la pollution
+      et sur la météo de manière succiente et claire. Une partie du traitement
+      des données est forcément effectuée dans les scripts de récupération. La
+      class de base dans
+      <code>api.py</code> contient des méthodes communes pour traiter les
+      réponses d'API. Les classes spécialisées dans
+      <code>pollution_api.py</code> et <code>weather_api.py</code> implémentent
+      des méthodes spécifiques à chaque type de données.
+    </p>
+    <p class="text__primary">
+      Enfin nous avons un script <code>local_data.py</code> qui permet
+      simplement de prétaiter les données avant de les fournir aux algorithms de
+      <code>scikit-learn</code>
+    </p>
+
+    <h2 class="heading__primary">Premiers algorithmes codés</h2>
+    <p class="text__primary">
+      <strong>ARTHUR</strong>. Expliquer que le script
+      <code>position_offsetter</code> permettra de récupérer les données selon
+      un décallage avec la vitesse du vent.
+    </p>
   </body>
 </html>
