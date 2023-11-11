@@ -40,6 +40,6 @@ if __name__ == "__main__":
 
     print(f"Current Position: ({position.lat}, {position.lon})")
     position.offset(wind_speed, wind_direction, time)
-    print(f"New Position 1 hour before: ({position.lat}, {position.lon})")
+    print(f"New Position {time} hours after: ({position.lat}, {position.lon})")
 
 
