@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 import requests
 
 from src.api.api import Api
