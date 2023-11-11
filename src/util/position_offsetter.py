@@ -5,6 +5,7 @@ import math
 
 class PositionOffsetter:
     EARTH_RADIUS_KM = 6371.0
+    FLOAT_APPROXIMATION = 6
 
     def __init__(self, lat, lon):
         self.lat = lat
@@ -25,8 +26,8 @@ class PositionOffsetter:
         lat2 = math.asin(math.sin(lat1) * A + math.cos(lat1) * B * math.cos(wind_direction_rad))
         lon2 = lon1 + math.atan2(math.sin(wind_direction_rad) * B * math.cos(lat1), A - math.sin(lat1) * math.sin(lat2))
 
-        self.lat = round(math.degrees(lat2), 6)
-        self.lon = round(math.degrees(lon2), 6)
+        self.lat = round(math.degrees(lat2), self.FLOAT_APPROXIMATION)
+        self.lon = round(math.degrees(lon2), self.FLOAT_APPROXIMATION)
 
 
 if __name__ == "__main__":
