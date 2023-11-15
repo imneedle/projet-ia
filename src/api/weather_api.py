@@ -4,7 +4,7 @@ from src.api.api import Api
 
 
 class WeatherApi(Api):
-    url = "https://api.open-meteo.com/v1/forecast"
+    url = "https://archive-api.open-meteo.com/v1/archive"
 
     def __init__(self):
         ...
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         "longitude": "5.718267792253707",
         "hourly": "relativehumidity_2m,dewpoint_2m,cloudcover_mid,windspeed_80m,winddirection_80m,temperature_80m",
         "daily": "temperature_2m_max,temperature_2m_min",
-        "timezone": "Europe/Berlin",
+        "timezone": "Europe/London",
         "forecast_days": "1"
     }
     data = api.fetch(params)

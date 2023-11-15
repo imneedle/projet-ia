@@ -228,15 +228,24 @@
     </p>
     <p class="text__primary">
       Enfin nous avons un script <code>local_data.py</code> qui permet
-      simplement de prétraiter les données avant de les fournir aux algorithmes de
-      <code>scikit-learn</code>
+      simplement de prétraiter les données avant de les fournir aux algorithmes
+      de
+      <code>scikit-learn</code>, et de les stocker localement pour éviter les
+      limites d'API de nos fournisseurs de données. A terme, ce script pourrait
+      aussi découper les requêtes en plusieurs, étalées sur plusieurs jours,
+      pour contourner ces limites.
     </p>
 
     <h2 class="heading__primary">Premiers algorithmes codés</h2>
     <p class="text__primary">
-      <strong>ARTHUR</strong>. Expliquer que le script
-      <code>position_offsetter</code> permettra de récupérer les données selon
-      un décallage avec la vitesse du vent. Expliquer pourquoi on a besoin de ca.
+      Dans le jeu de données utilisé, nous avons souhaité fournir les quantités
+      de différents polluants en amont du vent. Afin de pouvoir réaliser cela,
+      il a fallu, pour chaque heure, récupérer la vitesse du vent et sa
+      direction. Ces données sont utilisées pour calculer la position de
+      l'amont du vent à partir de laquelle les polluants sont arrivés. Ces
+      coordonnées seront ensuite utilisées pour récupérer, grâce à
+      OpenWeatherMap, les données de pollution à cette position.
+      
     </p>
 
     <h2 class="heading__primary">Diagramme temporel</h2>
