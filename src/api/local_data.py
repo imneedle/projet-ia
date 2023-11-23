@@ -17,7 +17,7 @@ class LocalData:
     def __init__(self):
         os.makedirs(os.path.dirname(f'../../data/'), exist_ok=True)
 
-    def saveData(self, data):
+    def save(self, data):
         if (type(data) != dict):
             raise TypeError("data must be a dict")
         
@@ -26,7 +26,7 @@ class LocalData:
             with open(f'../../data/{key}', 'w') as f:
                 f.write(data[key])
     
-    def savePollution(self, data, prefix=""):
+    def save_pollution(self, data, prefix=""):
         if (type(data) != dict):
             raise TypeError("data must be a dict")
         
@@ -51,7 +51,7 @@ class LocalData:
         for component in files:
             files[component].close()
 
-    def saveWeather(self, data, prefix=""):
+    def save_weather(self, data, prefix=""):
         if (type(data) != dict):
             raise TypeError("data must be a dict")
         
@@ -78,7 +78,7 @@ class LocalData:
         for component in files:
             files[component].close()
 
-    def loadData(self, key):
+    def load_data(self, key):
         if (type(key) != str):
             raise TypeError("key must be a string")
         
@@ -114,7 +114,7 @@ if __name__ == "__main__":
             "appid": "3f4dd805354d2b0a8aaf79250d2b44fe",
         }
         data = api.fetch(params)
-        localData.savePollution(data)
+        localData.save_pollution(data)
 
         print("Processing weather data...")
         api: Api = WeatherApi()  # Don't forget to add src/ directory to $PYTHONPATH
@@ -128,7 +128,7 @@ if __name__ == "__main__":
             "end_date": END.strftime("%Y-%m-%d")
         }
         data = api.fetch(params)
-        localData.saveWeather(data)
+        localData.save_weather(data)
         print("Done.")
     except Exception as e:
         print("Error while fetching data.")
