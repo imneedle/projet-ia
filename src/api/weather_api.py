@@ -22,12 +22,11 @@ class WeatherApi(Api):
 if __name__ == "__main__":
     api: Api = WeatherApi()  # Don't forget to add src/ directory to $PYTHONPATH
     params = {
-        "latitude": "45.18857814633678",
-        "longitude": "5.718267792253707",
-        "hourly": "relativehumidity_2m,dewpoint_2m,cloudcover_mid,windspeed_80m,winddirection_80m,temperature_80m",
-        "daily": "temperature_2m_max,temperature_2m_min",
-        "timezone": "Europe/London",
-        "forecast_days": "1"
+        "latitude": 52.52,
+        "longitude": 13.41,
+        "start_date": "2023-11-23",
+        "end_date": "2023-11-24",
+        "hourly": ["wind_speed_100m", "wind_direction_100m"]
     }
     data = api.fetch(params)
     print(data)
