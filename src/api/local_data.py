@@ -68,11 +68,12 @@ class LocalData:
         # Save data to local files
         for component in data["hourly"]:
             if (component != "time"):
-                print("\n".join(data["hourly"][component]), file=files[component])
+                print("component : ", component)
+                print("\n".join(str(data["hourly"][component])), file=files[component])
         
         for component in data["daily"]:
             if (component != "time"):
-                print("\n".join(repeat(data["daily"][component]), 24), file=files[component])
+                print("\n".join(str(repeat(data["daily"][component], 24))), file=files[component])
 
         # Close all files
         for component in files:
