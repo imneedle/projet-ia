@@ -1,8 +1,10 @@
 #! /usr/bin/python3
 
+import sys
 import os
 import datetime
 import traceback
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 from numpy import repeat
 
