@@ -1,7 +1,9 @@
 #! /usr/bin/python3
+from select import poll
 import sys
 import os
 from datetime import datetime
+from matplotlib.pyplot import get
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 import requests
@@ -33,6 +35,20 @@ def get_wind_data(latitude, longitude, start_date, end_date):
     wind_direction = wind_data["wind_direction_100m"]
     return wind_speed, wind_direction
 
+def get_weather_data(latitude, longitude, start_date, end_date):
+    api = WeatherApi()
+    params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "start_date": datetime.utcfromtimestamp(int(start_date)+3600).strftime('%Y-%m-%d'),
+        "end_date": datetime.utcfromtimestamp(int(end_date)).strftime('%Y-%m-%d'),
+        "hourly": ["temperature_2m", "relative_humidity_2m", "precipitation", "dewpoint_2m", "wind_speed_10m", "wind_direction_10m"]
+    }
+    data = api.fetch(params)
+    df = pd.DataFrame(data["hourly"])
+    df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%d")
+    df.set_index("time", inplace=True)
+    return df
 
 def get_data(lat, lon, start, end, appid):
     api = PollutionApi()
@@ -54,8 +70,9 @@ def get_data(lat, lon, start, end, appid):
 
 
 def train_knn_model(df, n_neighbors):
-    X = df.drop(["aqi"], axis=1)
     y = df["aqi"]
+    X = df.drop(["aqi"], axis=1)
+    X.to_csv("X.csv")
     knn = KNeighborsRegressor(n_neighbors=n_neighbors)
     knn.fit(X, y)
     return knn
@@ -64,13 +81,18 @@ def train_knn_model(df, n_neighbors):
 if __name__ == "__main__":
     lat = 45.185992
     lon = 5.734384
-    start = "1637664000"
-    end = "1637750400"
+    start = "1637624400"
+    end = "1640130000"
     appid = "3f4dd805354d2b0a8aaf79250d2b44fe"
     n_neighbors = 5
 
     # Get pollution data
-    df = get_data(lat, lon, start, end, appid)
+    df = get_weather_data(lat, lon, start, end)
+
+    poll_df = get_data(lat, lon, start, end, appid)
+    poll_df = poll_df["aqi"]
+    df = pd.concat([df, poll_df], axis=1)
+    print(df)
 
     # Get wind data
     wind_speed, wind_direction = get_wind_data(lat, lon, start, end)
@@ -79,38 +101,24 @@ if __name__ == "__main__":
     offsetter = PositionOffsetter(lat, lon)
     offsetter.offset(wind_speed[0], wind_direction[0], 0.5)
     offsetted_latitude, offsetted_longitude = offsetter.lat, offsetter.lon
-    print(wind_speed[0], wind_direction[0])
-    print(offsetted_latitude, offsetted_longitude)
+    #print(wind_speed[0], wind_direction[0])
+    #print(offsetted_latitude, offsetted_longitude)
 
     # Get pollution data for offsetted position
     offsetted_df = get_data(offsetted_latitude, offsetted_longitude, start, end, appid)
     offsetted_df = offsetted_df.rename(columns=(lambda a: "24h-" + a))
-    print(offsetted_df)
 
     # Combine pollution data for both positions
     combined_df = pd.concat([df, offsetted_df], axis=1)
+    #print(combined_df)
+    combined_df.to_csv("combined.csv")
 
     # Train KNN model
     knn = train_knn_model(combined_df, n_neighbors)
 
     # Use the trained model to predict air quality at the given position
     # for the next 24 hours
-    api = PollutionApi()
-    params = {
-        "lat": lat,
-        "lon": lon,
-        "start": end,
-        "end": str(int(end) + 86400),
-        "appid": appid,
-    }
-    future_data = api.fetch(params)
-    future_df = pd.DataFrame(future_data["list"])
-    future_df["dt"] = pd.to_datetime(future_df["dt"], unit="s")
-    future_df.set_index("dt", inplace=True)
-    future_df = future_df[["main", "components"]]
-    future_df = pd.concat([future_df.drop(["main"], axis=1), future_df["main"].apply(pd.Series)], axis=1)
-    future_df = pd.concat([future_df.drop(["components"], axis=1), future_df["components"].apply(pd.Series)], axis=1)
-    future_X = future_df.drop(["aqi"], axis=1)
+    future_df = get_weather_data(lat, lon, end, str(int(end) + 86400))
 
     future_ws, future_wd = get_wind_data(lat, lon, end, str(int(end) + 86400))
     future_offsetter = PositionOffsetter(lat, lon)
@@ -119,11 +127,11 @@ if __name__ == "__main__":
     future_offsetted_df = get_data(future_offsetted_latitude, future_offsetted_longitude, end, str(int(end) + 86400), appid)
     future_offsetted_df = future_offsetted_df.rename(columns=(lambda a: "24h-" + a))
 
-    print(future_offsetted_df)
-    future_combined_df = pd.concat([future_X, future_offsetted_df], axis=1)
+    future_combined_df = pd.concat([future_df, future_offsetted_df], axis=1)
 
     future_y = knn.predict(future_combined_df)
+    actual_y = get_data(lat, lon, end, str(int(end) + 86400), appid)["aqi"].to_numpy()
 
     print("timestamp", "prediction", "actual", sep="\t")
     for i in range(24):
-        print(future_df.index[i], future_y[i], future_df["aqi"][i], sep="\t")
+        print(future_df.index[i], future_y[i], actual_y[i], sep="\t")
