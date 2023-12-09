@@ -77,16 +77,18 @@ if __name__ == "__main__":
 
     # Get offsetted position
     offsetter = PositionOffsetter(lat, lon)
-    offsetter.offset(wind_speed[0], wind_direction[0], 1)
+    offsetter.offset(wind_speed[0], wind_direction[0], 0.5)
     offsetted_latitude, offsetted_longitude = offsetter.lat, offsetter.lon
     print(wind_speed[0], wind_direction[0])
     print(offsetted_latitude, offsetted_longitude)
 
     # Get pollution data for offsetted position
     offsetted_df = get_data(offsetted_latitude, offsetted_longitude, start, end, appid)
+    offsetted_df = offsetted_df.rename(columns=(lambda a: "24h-" + a))
+    print(offsetted_df)
 
     # Combine pollution data for both positions
-    combined_df = pd.concat([df, offsetted_df])
+    combined_df = pd.concat([df, offsetted_df], axis=1)
 
     # Train KNN model
     knn = train_knn_model(combined_df, n_neighbors)
@@ -109,7 +111,18 @@ if __name__ == "__main__":
     future_df = pd.concat([future_df.drop(["main"], axis=1), future_df["main"].apply(pd.Series)], axis=1)
     future_df = pd.concat([future_df.drop(["components"], axis=1), future_df["components"].apply(pd.Series)], axis=1)
     future_X = future_df.drop(["aqi"], axis=1)
-    future_y = knn.predict(future_X)
+
+    future_ws, future_wd = get_wind_data(lat, lon, end, str(int(end) + 86400))
+    future_offsetter = PositionOffsetter(lat, lon)
+    future_offsetter.offset(future_ws[0], future_wd[0], 0.5)
+    future_offsetted_latitude, future_offsetted_longitude = future_offsetter.lat, future_offsetter.lon
+    future_offsetted_df = get_data(future_offsetted_latitude, future_offsetted_longitude, end, str(int(end) + 86400), appid)
+    future_offsetted_df = future_offsetted_df.rename(columns=(lambda a: "24h-" + a))
+
+    print(future_offsetted_df)
+    future_combined_df = pd.concat([future_X, future_offsetted_df], axis=1)
+
+    future_y = knn.predict(future_combined_df)
 
     print("timestamp", "prediction", "actual", sep="\t")
     for i in range(24):
