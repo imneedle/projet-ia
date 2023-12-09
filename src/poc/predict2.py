@@ -69,4 +69,7 @@ if __name__ == "__main__":
     future_df = pd.concat([future_df.drop(["components"], axis=1), future_df["components"].apply(pd.Series)], axis=1)
     future_X = future_df.drop(["aqi"], axis=1)
     future_y = knn.predict(future_X)
-    print(future_y, len(future_y))
+
+    print("timestamp", "prediction", "actual", sep="\t")
+    for i in range(24):
+        print(future_df.index[i], future_y[i], future_df["aqi"][i], sep="\t")
