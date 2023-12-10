@@ -1,9 +1,7 @@
-#! /usr/bin/python3
-from select import poll
+#!/usr/bin/env python3
 import sys
 import os
 from datetime import datetime
-from matplotlib.pyplot import get
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 import requests
@@ -35,6 +33,7 @@ def get_wind_data(latitude, longitude, start_date, end_date):
     wind_direction = wind_data["wind_direction_100m"]
     return wind_speed, wind_direction
 
+
 def get_weather_data(latitude, longitude, start_date, end_date):
     api = WeatherApi()
     params = {
@@ -46,9 +45,11 @@ def get_weather_data(latitude, longitude, start_date, end_date):
     }
     data = api.fetch(params)
     df = pd.DataFrame(data["hourly"])
-    df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%d")
+    # df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%d")
+    df["time"] = pd.to_datetime(df["time"], format="ISO8601")
     df.set_index("time", inplace=True)
     return df
+
 
 def get_data(lat, lon, start, end, appid):
     api = PollutionApi()
@@ -101,8 +102,6 @@ if __name__ == "__main__":
     offsetter = PositionOffsetter(lat, lon)
     offsetter.offset(wind_speed[0], wind_direction[0], 0.5)
     offsetted_latitude, offsetted_longitude = offsetter.lat, offsetter.lon
-    #print(wind_speed[0], wind_direction[0])
-    #print(offsetted_latitude, offsetted_longitude)
 
     # Get pollution data for offsetted position
     offsetted_df = get_data(offsetted_latitude, offsetted_longitude, start, end, appid)
@@ -110,7 +109,6 @@ if __name__ == "__main__":
 
     # Combine pollution data for both positions
     combined_df = pd.concat([df, offsetted_df], axis=1)
-    #print(combined_df)
     combined_df.to_csv("combined.csv")
 
     # Train KNN model

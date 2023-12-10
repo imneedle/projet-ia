@@ -4,6 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 import requests
+import pandas as pd
 
 from src.api.api import Api
 
@@ -17,6 +18,14 @@ class WeatherApi(Api):
     def fetch(self, params):
         r = requests.get(self.url, params)
         return r.json()
+
+    def get_dataframe(self, params):
+        data = self.fetch(params)
+        df = pd.DataFrame(data["hourly"])
+        # df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%d")
+        df["time"] = pd.to_datetime(df["time"], format="ISO8601")
+        df.set_index("time", inplace=True)
+        return df
 
 
 if __name__ == "__main__":

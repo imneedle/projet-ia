@@ -1,82 +1,121 @@
-#! /usr/bin/python3
+#!/usr/bin/env python3
 import sys
 import os
+from datetime import datetime
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 import requests
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+import pandas as pd
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_squared_error
-from datetime import datetime, timedelta
 
 from src.api.api import Api
 from src.api.pollution_api import PollutionApi
+from src.api.weather_api import WeatherApi
+from src.util.position_offsetter import PositionOffsetter
+from src.model.knn import KnnModel
 
 
-def process_data(data):
-    features = ['co', 'no', 'no2', 'o3', 'so2', 'pm2_5', 'pm10', 'nh3']
-    X = [[entry['components'][feature] for feature in features]
-         for entry in data['list']]
-    y = [entry['main']['aqi'] for entry in data['list']]
-    return X, y
+class PoC:
+    @staticmethod
+    def run():
+        # Set position to Grenoble
+        lat, lon = 45.185992, 5.734384
+        training_days = 28
+        start_date = 1637624400
+        end_date = start_date + (training_days + 1) * 24 * 3600
+        appid = "3f4dd805354d2b0a8aaf79250d2b44fe"
+
+        # Init APIs
+        pollution_api = PollutionApi()
+        weather_api = WeatherApi()
+
+        # Get weather data at position
+        weather_df = weather_api.get_dataframe({
+            "latitude": lat, "longitude": lon,
+            "start_date": datetime.utcfromtimestamp(start_date + 3600).strftime('%Y-%m-%d'),
+            "end_date": datetime.utcfromtimestamp(end_date).strftime('%Y-%m-%d'),
+            "hourly": ["temperature_2m", "relative_humidity_2m", "precipitation", "dewpoint_2m", "wind_speed_10m", "wind_direction_10m"],
+        })
+
+        # Get pollution data at position
+        pollution_df = pollution_api.get_dataframe({
+            "lat": lat, "lon": lon, "start":
+            start_date, "end": end_date,
+            "appid": appid
+        })['aqi']
+
+        # Combine the data
+        df = pd.concat([weather_df, pollution_df], axis=1)
+
+        # Get pollution data for offsetted wind position 24h before
+        wind_df = weather_api.get_dataframe({
+            "latitude": lat, "longitude": lon,
+            "start_date": datetime.utcfromtimestamp(start_date - 86400).strftime('%Y-%m-%d'),
+            "end_date": datetime.utcfromtimestamp(end_date - 86400).strftime('%Y-%m-%d'),
+            "hourly": ["wind_speed_100m", "wind_direction_100m"],
+        })
+        wind_speed = wind_df['wind_speed_100m'][0]
+        wind_direction = wind_df['wind_direction_100m'][0]
+
+        offsetter = PositionOffsetter(lat, lon)
+        offsetter.offset(wind_speed, wind_direction, .5)
+        offsetted_lat, offsetted_lon = offsetter.lat, offsetter.lon
+
+        offsetted_df = pollution_api.get_dataframe({
+            "lat": offsetted_lat, "lon": offsetted_lon,
+            "start": start_date, "end": end_date,
+            "appid": appid
+        })
+        offsetted_df = offsetted_df.rename(columns=lambda a: f'24h-{a}')
+
+        # Combine the data at position with the data at offsetted position
+        combined_df = pd.concat([df, offsetted_df], axis=1)
+
+        # Feed data and train KNN model
+        knn_model = KnnModel(n_neighbors=5)
+        knn = knn_model.train(combined_df)
+
+        # Predict AQI for the next 24h
+        future_df = weather_api.get_dataframe({
+            "latitude": lat, "longitude": lon,
+            "start_date": datetime.utcfromtimestamp(end_date + 3600).strftime('%Y-%m-%d'),
+            "end_date": datetime.utcfromtimestamp(end_date + 86400).strftime('%Y-%m-%d'),
+            "hourly": ["temperature_2m", "relative_humidity_2m", "precipitation", "dewpoint_2m", "wind_speed_10m", "wind_direction_10m"]
+        })
+
+        future_wind_df = weather_api.get_dataframe({
+            "latitude": lat, "longitude": lon,
+            "start_date": datetime.utcfromtimestamp(start_date - 86400).strftime('%Y-%m-%d'),
+            "end_date": datetime.utcfromtimestamp(end_date - 86400).strftime('%Y-%m-%d'),
+            "hourly": ["wind_speed_100m", "wind_direction_100m"],
+        })
+        future_ws = future_wind_df['wind_speed_100m'][0]
+        future_wd = future_wind_df['wind_direction_100m'][0]
+
+        future_offsetter = PositionOffsetter(lat, lon)
+        future_offsetter.offset(future_ws, future_wd, .5)
+        future_offsetted_lat, future_offsetted_lon = future_offsetter.lat, future_offsetter.lon
+
+        future_offsetted_df = pollution_api.get_dataframe({
+            "lat": offsetted_lat, "lon": offsetted_lon,
+            "start": end_date, "end": end_date + 86400,
+            "appid": appid
+        })
+        future_offsetted_df = future_offsetted_df.rename(columns=lambda a: f'24h-{a}')
+
+        future_combined_df = pd.concat([future_df, future_offsetted_df], axis=1)
+
+        future_y = knn.predict(future_combined_df)
+        actual_y = pollution_api.get_dataframe({
+            "lat": offsetted_lat, "lon": offsetted_lon,
+            "start": end_date, "end": end_date + 86400,
+            "appid": appid
+        })['aqi'].to_numpy()
+
+        print("timestamp", "prediction", "actual", sep="\t")
+        for i in range(24):
+            print(future_df.index[i], future_y[i], actual_y[i], sep="\t")
 
 
-def train_knn_model(X_train, y_train):
-    # Normalize the data
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-
-    # Create and train the KNN model
-    knn_model = KNeighborsRegressor(n_neighbors=5)
-    knn_model.fit(X_train_scaled, y_train)
-
-    return knn_model, scaler
-
-
-def predict_future_air_quality(model, scaler, current_data_point, time_intervals):
-    current_features = [current_data_point['components'][feature]
-                        for feature in ['co', 'no', 'no2', 'o3', 'so2', 'pm2_5', 'pm10', 'nh3']]
-    normalized_features = scaler.transform([current_features])
-
-    predictions = []
-    for interval in time_intervals:
-        future_timestamp = current_data_point['dt'] + interval * 3600  # Convert hours to seconds
-        future_data_point = {'dt': future_timestamp, 'components': {'co': 0, 'no': 0, 'no2': 0, 'o3': 0, 'so2': 0, 'pm2_5': 0, 'pm10': 0, 'nh3': 0}}
-
-        # Predict air quality for the future timestamp
-        future_prediction = model.predict(normalized_features)[0]
-        predictions.append({'timestamp': future_timestamp, 'prediction': future_prediction})
-
-    return predictions
-
-
-if __name__ == "__main__":
-    api: Api = PollutionApi()
-    params = {
-        "lat": "45.19",
-        "lon": "5.71",
-        "start": "1606488670",
-        "end": "1607093470",
-        "appid": "3f4dd805354d2b0a8aaf79250d2b44fe",
-    }
-    data = api.fetch(params)
-
-    # Process the data
-    X, y = process_data(data)
-
-    # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Train the KNN model
-    knn_model, scaler = train_knn_model(X_train, y_train)
-
-    # Make predictions for future air quality
-    current_data_point = data['list'][0]  # Assuming the first data point in the list
-    time_intervals = [1, 4, 8, 16, 24]  # Predictions for 1h, 4h, 8h, 16h, and 24h in the future
-    future_predictions = predict_future_air_quality(knn_model, scaler, current_data_point, time_intervals)
-
-    # Print future predictions
-    for prediction in future_predictions:
-        timestamp = datetime.utcfromtimestamp(prediction['timestamp']).strftime('%Y-%m-%d %H:%M:%S')
-        print(f"Prediction for {timestamp}: {prediction['prediction']}")
+if __name__ == '__main__':
+    PoC.run()

@@ -33,11 +33,11 @@ class PositionOffsetter:
 
 
 if __name__ == "__main__":
-    lat = 37.7749
-    lon = -122.4194
+    lat = 45.185992
+    lon = 5.734384
     position = PositionOffsetter(lat, lon)
 
-    wind_speed = 100  # in km/h
+    wind_speed = 7  # in km/h
     wind_direction = 135  # in degrees
     time = 1  # in hours
 

@@ -1,6 +1,3 @@
-import requests
-
-
 class Api:
     url: str
 
@@ -8,4 +5,7 @@ class Api:
         ...
 
     def fetch(self, params):
+        ...
+
+    def get_dataframe(self, params):
         ...
