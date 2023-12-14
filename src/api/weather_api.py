@@ -22,8 +22,8 @@ class WeatherApi(Api):
     def get_dataframe(self, params):
         data = self.fetch(params)
         df = pd.DataFrame(data["hourly"])
-        # df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%d")
-        df["time"] = pd.to_datetime(df["time"], format="ISO8601")
+        df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%d")
+        #df["time"] = pd.to_datetime(df["time"], format="ISO8601")
         df.set_index("time", inplace=True)
         return df
 

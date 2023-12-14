@@ -1,85 +1,29 @@
 #! /usr/bin/python3
 
+from calendar import c
 import sys
 import os
-import datetime
+from datetime import datetime, timezone as tz
 import traceback
+import json
+from django import conf
+from pytz import timezone
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 from numpy import repeat
+import pandas as pd
 
 from src.api.api import Api
 from src.api.pollution_api import PollutionApi
 from src.api.weather_api import WeatherApi
+from src.util.position_offsetter import PositionOffsetter
 
-START = datetime.datetime(2020, 11, 28)
-END = datetime.datetime(2020, 11, 30)
+START = datetime(2020, 11, 28, tzinfo=tz.utc)
+END = datetime(2023, 12, 1, tzinfo=tz.utc)
 
 class LocalData:
     def __init__(self):
         os.makedirs(os.path.dirname(f'../../data/'), exist_ok=True)
-
-    def save(self, data):
-        if (type(data) != dict):
-            raise TypeError("data must be a dict")
-        
-        # Save data to local file
-        for key in data:
-            with open(f'../../data/{key}', 'w') as f:
-                f.write(data[key])
-    
-    def save_pollution(self, data, prefix=""):
-        if (type(data) != dict):
-            raise TypeError("data must be a dict")
-        
-        if (type(prefix) != str):
-            raise TypeError("prefix must be a string")
-        
-        # Open all files only once
-        files = {}
-        for component in data["list"][0]["components"]:
-            files[component] = open(f"../../data/{prefix}{component}.txt", 'w')
-        files["dt"] = open(f"../../data/{prefix}dt.txt", 'w')
-        files["aqi"] = open(f"../../data/{prefix}aqi.txt", 'w')
-            
-        # Save data to local files
-        for i in range(len(data["list"])):
-            files["dt"].write(str(data["list"][i]["dt"]) + "\n")
-            files["aqi"].write(str(data["list"][i]["main"]["aqi"]) + "\n")
-            for component in data["list"][i]["components"]:
-                print(data["list"][i]["components"][component], file=files[component])
-
-        # Close all files
-        for component in files:
-            files[component].close()
-
-    def save_weather(self, data, prefix=""):
-        if (type(data) != dict):
-            raise TypeError("data must be a dict")
-        
-        if (type(prefix) != str):
-            raise TypeError("prefix must be a string")
-        
-        # Open all files only once
-        files = {}
-        for component in data["hourly"]:
-            files[component] = open(f"../../data/{prefix}{component}.txt", 'w')
-        for component in data["daily"]:
-            files[component] = open(f"../../data/{prefix}{component}.txt", 'w')
-
-        # Save data to local files
-        for component in data["hourly"]:
-            if (component != "time"):
-                print("component : ", component)
-                print("\n".join(str(data["hourly"][component])), file=files[component])
-        
-        for component in data["daily"]:
-            if (component != "time"):
-                print("\n".join(str(repeat(data["daily"][component], 24))), file=files[component])
-
-        # Close all files
-        for component in files:
-            files[component].close()
 
     def load_data(self, key):
         if (type(key) != str):
@@ -91,52 +35,128 @@ class LocalData:
         
         return data
     
-if __name__ == "__main__":
-    print("Running this script will delete all data in the data/ directory. Are you sure you want to continue? (y/N)")
-    if (input() != "y"):
-        print("Aborting...")
-        exit()
-    print("Deleting data...")
-    try :
-        os.system("rm -r ../../data/*")
-    except:
-        print("Error while deleting data.")
-        exit()
-    
-    print("Done.")
+def get_next_batch(config):
+    end = min(int(config["current_date"]) + (int(config["batch_size"])*24 - 1)*3600, int(config["end"]))
+    # Getting weather data
+    api: Api = WeatherApi()  # Don't forget to add src/ directory to $PYTHONPATH
+    params = {
+        "latitude": config["lat"],
+        "longitude": config["lon"],
+        "start_date": datetime.utcfromtimestamp(int(config["current_date"])+3600).strftime('%Y-%m-%d'),
+        "end_date": datetime.utcfromtimestamp(end).strftime('%Y-%m-%d'),
+        "hourly": ["temperature_2m", "relative_humidity_2m", "precipitation", "dewpoint_2m", "wind_speed_10m", "wind_direction_10m"],
+    }
+    data = api.fetch(params)
+    weather_df = pd.DataFrame(data["hourly"])
+    weather_df["time"] = pd.to_datetime(weather_df["time"], format="%Y-%m-%d")
+    weather_df.set_index("time", inplace=True)
 
-    try:
-        print("Processing pollution data...")
-        localData = LocalData()
-        api: Api = PollutionApi()  # Don't forget to add src/ directory to $PYTHONPATH
+    # Getting pollution data
+    api = PollutionApi()
+    params = {
+        "lat": config["lat"],
+        "lon": config["lon"],
+        "start": config["current_date"],
+        "end": end,
+        "appid": config["appid"],
+    }
+    data = api.fetch(params)
+    pol_df = pd.DataFrame(data["list"])
+    pol_df.rename(columns={"dt": "time"}, inplace=True)
+    pol_df["time"] = pd.to_datetime(pol_df["time"], unit="s")
+    pol_df.set_index("time", inplace=True)
+    pol_df = pol_df[["main", "components"]]
+    pol_df = pd.concat([pol_df.drop(["main"], axis=1), pol_df["main"].apply(pd.Series)], axis=1)
+    pol_df = pd.concat([pol_df.drop(["components"], axis=1), pol_df["components"].apply(pd.Series)], axis=1)
+
+    # Getting data for every offset
+    offsetted_df = pd.DataFrame()
+    for i in range(0, int(config["batch_size"])):
+        offsetter = PositionOffsetter(config["lat"], config["lon"])
+        offsetter.offset(weather_df["wind_speed_10m"][i], weather_df["wind_direction_10m"][i], 1)
+        api = PollutionApi()
         params = {
-            "lat": "45.1",
-            "lon": "5.6",
-            "start": int(START.timestamp()),
-            "end": int(END.timestamp()),
+            "lat": offsetter.lat,
+            "lon": offsetter.lon,
+            "start": config["current_date"] + 3600*24 * (i-1),
+            "end": int(config["current_date"]) + 3600*(24*i-1),
             "appid": "3f4dd805354d2b0a8aaf79250d2b44fe",
         }
         data = api.fetch(params)
-        localData.save_pollution(data)
+        current_offset_df = pd.DataFrame(data["list"])
+        current_offset_df.rename(columns={"dt": "time"}, inplace=True)
+        current_offset_df["time"] = pd.to_datetime(current_offset_df["time"], unit="s")
+        current_offset_df["time"] += pd.Timedelta(days=1)
+        current_offset_df.set_index("time", inplace=True)
+        current_offset_df = current_offset_df[["main", "components"]]
+        current_offset_df = pd.concat([current_offset_df.drop(["main"], axis=1), current_offset_df["main"].apply(pd.Series)], axis=1)
+        current_offset_df = pd.concat([current_offset_df.drop(["components"], axis=1), current_offset_df["components"].apply(pd.Series)], axis=1)
+        offsetted_df = pd.concat([offsetted_df, current_offset_df])
 
-        print("Processing weather data...")
-        api: Api = WeatherApi()  # Don't forget to add src/ directory to $PYTHONPATH
-        params = {
-            "latitude": "45.18857814633678",
-            "longitude": "5.718267792253707",
-            "hourly": "relativehumidity_2m,dewpoint_2m,cloudcover_mid,windspeed_80m,winddirection_80m,temperature_80m",
-            "daily": "temperature_2m_max,temperature_2m_min",
-            "timezone": "Europe/London",
-            "start_date": START.strftime("%Y-%m-%d"),
-            "end_date": END.strftime("%Y-%m-%d")
-        }
-        data = api.fetch(params)
-        localData.save_weather(data)
+    offsetted_df = offsetted_df.rename(columns=(lambda x: x + "_offset"))
+
+    offsetted_df.to_csv(f'../../data/offsetted.csv')
+    weather_df.to_csv(f'../../data/weather.csv')
+    pol_df.to_csv(f'../../data/pollution.csv')
+
+    # Merging dataframes
+    df = pd.concat([weather_df, pol_df], axis=1)
+    df = pd.concat([df, offsetted_df], axis=1)
+
+    return df
+    
+if __name__ == "__main__":
+    config = {}
+    try:
+        with open(f'../../data/config.json', 'r') as f:
+            config = json.load(f)
+    except FileNotFoundError:
+        print("Generating new config file...")
+        with open(f'../../data/config.json', 'w') as cfg_file:
+            config = {"lat": "45.1",
+                      "lon": "5.6",
+                      "appid": "3f4dd805354d2b0a8aaf79250d2b44fe",
+                      "start": int(START.timestamp()),
+                      "end": int(END.timestamp()),
+                      "batch_size": 60,
+                      "current_date": int(START.timestamp())} 
+            json.dump(config, cfg_file)
         print("Done.")
+    except Exception as e:
+        print("Error while loading config file.")
+        print(e)
+        print(traceback.format_exc())
+        exit()
+
+    try:
+        data = pd.DataFrame()
+        with open(f'../../data/training.csv', 'r') as f:
+            data = pd.read_csv(f)
+
+            data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d")
+            data.set_index("time", inplace=True)
+
+            data = pd.concat([data, get_next_batch(config)])
+            data.to_csv(f'../../data/training.csv')
+
+            config["current_date"] = int(config["current_date"]) + int(config["batch_size"])*3600*24
+            with open(f'../../data/config.json', 'w') as cfg_file:
+                json.dump(config, cfg_file)
+            print(f"Got data until {config['current_date']}, remaining: {(config['end'] - config['current_date']) / config['batch_size']/3600/24} batches.")
+    except FileNotFoundError:
+        print("File not found, creating new file...")
+
+        df = get_next_batch(config)
+        df.to_csv(f'../../data/training.csv', )
+
+        config["current_date"] = int(config["current_date"]) + int(config["batch_size"])*3600*24
+        with open(f'../../data/config.json', 'w') as cfg_file:
+            json.dump(config, cfg_file)
+        print("Done first batch.")
+        exit()
     except Exception as e:
         print("Error while fetching data.")
         print(e)
         print(traceback.format_exc())
         print(data)
         exit()
-

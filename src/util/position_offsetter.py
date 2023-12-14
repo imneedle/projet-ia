@@ -10,8 +10,8 @@ class PositionOffsetter:
     FLOAT_APPROXIMATION = 6
 
     def __init__(self, lat, lon):
-        self.lat = lat
-        self.lon = lon
+        self.lat = float(lat)
+        self.lon = float(lon)
 
     def offset(self, wind_speed, wind_direction, time):
         """Offsets the position depending on the wind
