@@ -1,256 +1,416 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Projet IA</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css"
-    />
-    <style>
-      *,
-      *::after,
-      *::before {
-        font-size: 10px;
-        font-family: sans-serif;
-        margin: 0;
-        padding: 0;
-        line-height: 1;
-        color: #1e1e1e;
-        box-sizing: border-box;
-      }
-      body {
-        margin-bottom: 10em;
-      }
-      .heading__primary {
-        font-size: 2.4rem;
-        font-weight: bold;
-        margin: 2rem 4rem 1rem;
-        padding: 0 4rem 0;
-        text-transform: uppercase;
-      }
-      .text__primary {
-        font-size: 1.6rem;
-        line-height: 1.3;
-        padding: 2rem 8rem 0;
-        text-align: justify;
-        text-justify: inter-word;
-      }
-      .text__primary strong,
-      .item strong,
-      .text__primary em,
-      .text__primary code {
-        font-size: 1.6rem;
-      }
-      .text__primary code {
-        font-family: monospace;
-      }
-      .link {
-        text-decoration: none;
-        color: #007bff;
-        transition: color 0.3s;
-        font-size: 1.6rem;
-      }
-      .link.small {
-        font-size: 1rem;
-      }
-      .link:hover {
-        color: #ff6600;
-        text-decoration: underline;
-      }
-      .link:focus {
-        outline: none;
-      }
-      .list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-top: -1rem;
-        padding: 2rem 10rem 0;
-        font-size: 1.6rem;
-      }
-      .item {
-        font-size: inherit;
-      }
-      .references-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin: 0 3rem;
-        list-style: none;
-        padding: 2rem 5rem;
-        font-size: 1.6rem;
-      }
-      .references-list li {
-        counter-increment: reference;
-        position: relative;
-        font-size: 1.6rem;
-      }
-      .references-list li::before {
-        content: "[" counter(reference) "] ";
-        font-weight: bold;
-        font-size: 1.6rem;
-        margin-right: 5px;
-        position: absolute;
-        left: -25px;
-      }
-      .cool-heading {
-        font-family: "Arial", sans-serif;
-        font-size: 3rem;
-        color: #007bff;
-        text-align: center;
-        margin: 2rem 0 4rem;
-        position: relative;
-        cursor: pointer;
-        transition:
-          color 0.3s,
-          transform 0.3s;
-      }
-      .cool-heading:hover {
-        color: #ff6600;
-        transform: scale(1.1);
-        animation: bounce 0.5s ease infinite;
-      }
-      @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(0) scale(1);
-        }
-        50% {
-          transform: translateY(-10px) scale(1.2);
-        }
-      }
-      .modern-heading {
-        font-family: "Arial", sans-serif;
-        font-size: 2.5rem;
-        color: #007bff;
-        text-align: center;
-        margin-top: 100px;
-        position: relative;
-        cursor: pointer;
-        transition:
-          color 0.3s,
-          transform 0.3s;
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Projet IA</title>
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css" />
+  <style>
+    *,
+    *::after,
+    *::before {
+      font-size: 10px;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      color: #1e1e1e;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin-bottom: 10em;
+    }
+
+    .heading__primary {
+      font-size: 2.4rem;
+      font-weight: bold;
+      margin: 2rem 4rem 1rem;
+      padding: 0 4rem 0;
+      text-transform: uppercase;
+    }
+
+    .text__primary {
+      font-size: 1.6rem;
+      line-height: 1.3;
+      padding: 2rem 8rem 0;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .text__primary strong,
+    .item strong,
+    .text__primary em,
+    .text__primary code {
+      font-size: 1.6rem;
+    }
+
+    .text__primary code {
+      font-family: monospace;
+    }
+
+    .link {
+      text-decoration: none;
+      color: #007bff;
+      transition: color 0.3s;
+      font-size: 1.6rem;
+    }
+
+    .link.small {
+      font-size: 1rem;
+    }
+
+    .link:hover {
+      color: #ff6600;
+      text-decoration: underline;
+    }
+
+    .link:focus {
+      outline: none;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: -1rem;
+      padding: 2rem 10rem 0;
+      font-size: 1.6rem;
+    }
+
+    .item {
+      font-size: inherit;
+    }
+
+    .references-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 0 3rem;
+      list-style: none;
+      padding: 2rem 5rem;
+      font-size: 1.6rem;
+    }
+
+    .references-list li {
+      counter-increment: reference;
+      position: relative;
+      font-size: 1.6rem;
+    }
+
+    .references-list li::before {
+      content: "[" counter(reference) "] ";
+      font-weight: bold;
+      font-size: 1.6rem;
+      margin-right: 5px;
+      position: absolute;
+      left: -25px;
+    }
+
+    .cool-heading {
+      font-family: "Arial", sans-serif;
+      font-size: 3rem;
+      color: #007bff;
+      text-align: center;
+      margin: 2rem 0 4rem;
+      position: relative;
+      cursor: pointer;
+      transition:
+        color 0.3s,
+        transform 0.3s;
+    }
+
+    .cool-heading:hover {
+      color: #ff6600;
+      transform: scale(1.1);
+      animation: bounce 0.5s ease infinite;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
       }
 
-      .modern-heading:hover {
-        color: #ff6600;
-        transform: scale(1.1);
-        animation: pulse 0.5s infinite alternate;
+      50% {
+        transform: translateY(-10px) scale(1.2);
+      }
+    }
+
+    .modern-heading {
+      font-family: "Arial", sans-serif;
+      font-size: 2.5rem;
+      color: #007bff;
+      text-align: center;
+      margin-top: 100px;
+      position: relative;
+      cursor: pointer;
+      transition:
+        color 0.3s,
+        transform 0.3s;
+    }
+
+    .modern-heading:hover {
+      color: #ff6600;
+      transform: scale(1.1);
+      animation: pulse 0.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1.2);
       }
 
-      @keyframes pulse {
-        0% {
-          transform: scale(1.2);
-        }
-        100% {
-          transform: scale(1.05);
-        }
+      100% {
+        transform: scale(1.05);
       }
-    </style>
-  </head>
-  <body>
-    <h1 class="modern-heading">Projet IA</h1>
-    <h1 class="cool-heading">
-      Neil Desplats &mdash; Arthur Pinto Rosa &mdash; Hadrien Eyraud
-    </h1>
-    <h1 class="modern-heading">Prédiction de la qualité de l'air</h1>
-    <h2 class="heading__primary">Jeu de données</h2>
-    <p class="text__primary">
-      Nous utilisons 2 API pour obtenir notre jeu de données:
-    </p>
-    <ul class="list">
-      <li class="item">
-        OpenWeatherMap &rarr; <strong>Air Pollution API</strong> :<p class="text__primary">Cette API nous
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="modern-heading">Projet IA</h1>
+  <h1 class="cool-heading">
+    Neil Desplats &mdash; Arthur Pinto Rosa &mdash; Hadrien Eyraud
+  </h1>
+  <h1 class="modern-heading">Prédiction de la qualité de l'air</h1>
+  <h2 class="heading__primary">Jeu de données</h2>
+  <p class="text__primary">
+    Nous utilisons 2 API pour obtenir notre jeu de données:
+  </p>
+  <ul class="list">
+    <li class="item">
+      OpenWeatherMap &rarr; <strong>Air Pollution API</strong> :<p class="text__primary">Cette API nous
         donne accès aux données de pollution historique (jusqu'au 27 Novembre
         2020) pour une position donnée, heure par heure. Outre l'indice de
         qualité de l'air de base, l'API renvoie des données sur les gaz
         polluants tels que le monoxyde de carbone (CO), le monoxyde d'azote
         (NO), le dioxyde d'azote (NO2), l'ozone (O3), le dioxyde de soufre
         (SO2), l'ammoniac (NH3) et les particules (PM2,5 et PM10).
-        </p>
-      </li>
-      <li class="item">
-        OpenMeteo &rarr; <strong>Historical Weather API</strong> : <p class="text__primary">Cette API
+      </p>
+    </li>
+    <li class="item">
+      OpenMeteo &rarr; <strong>Historical Weather API</strong> : <p class="text__primary">Cette API
         donne les données météorologiques historiques (remontant jusqu'en
         Janvier 1940) pour une position donnée. Nous récoltons sur un durée T :
-        <ul class="list">
-          <li class="item">
-            Pour chaque heure : humidité relative à 2m, point de rosée à 2m,
-            moyenne de la couverture nuageuse, vitesse du vent à 80m, direction
-            du vent à 80m, température à 80m.
-          </li>
-          <li class="item">
-            Pour chaque jour : la température maximale et minimale à 2m.
-          </li>
-        </ul>
-        </p>
-      </li>
-    </ul>
-    <p class="text__primary">
-      Ces deux jeux de données utilisent une combinaison d'observations de
-      stations météorologiques, d'aéronefs, de bouées, de radars et de
-      satellites pour créer un enregistrement complet des conditions
-      météorologiques passées. Ces ensembles de données sont capables de combler
-      les lacunes en utilisant des modèles mathématiques pour estimer les
-      valeurs de diverses variables météorologiques. En conséquence, les
-      ensembles de données de réanalyse peuvent fournir des informations
-      météorologiques historiques détaillées pour des emplacements qui
-      n'auraient peut-être pas eu de stations météorologiques à proximité, tels
-      que les zones rurales ou l'océan ouvert.
-    </p>
-    <p class="text__primary">
-      Les modèles pour les données météorologiques historiques utilisent une
-      résolution spatiale de 9 km pour résoudre les détails fins près des côtes
-      ou des terrains montagneux complexes. En général, une résolution spatiale
-      plus élevée signifie que les données sont plus détaillées et représentent
-      plus précisément les conditions météorologiques à des échelles plus
-      petites.
-    </p>
+      <ul class="list">
+        <li class="item">
+          Pour chaque heure : humidité relative à 2m, point de rosée à 2m,
+          moyenne de la couverture nuageuse, vitesse du vent à 80m, direction
+          du vent à 80m, température à 80m.
+        </li>
+        <li class="item">
+          Pour chaque jour : la température maximale et minimale à 2m.
+        </li>
+      </ul>
+      </p>
+    </li>
+  </ul>
+  <p class="text__primary">
+    Ces deux jeux de données utilisent une combinaison d'observations de
+    stations météorologiques, d'aéronefs, de bouées, de radars et de
+    satellites pour créer un enregistrement complet des conditions
+    météorologiques passées. Ces ensembles de données sont capables de combler
+    les lacunes en utilisant des modèles mathématiques pour estimer les
+    valeurs de diverses variables météorologiques. En conséquence, les
+    ensembles de données de réanalyse peuvent fournir des informations
+    météorologiques historiques détaillées pour des emplacements qui
+    n'auraient peut-être pas eu de stations météorologiques à proximité, tels
+    que les zones rurales ou l'océan ouvert.
+  </p>
+  <p class="text__primary">
+    Les modèles pour les données météorologiques historiques utilisent une
+    résolution spatiale de 9 km pour résoudre les détails fins près des côtes
+    ou des terrains montagneux complexes. En général, une résolution spatiale
+    plus élevée signifie que les données sont plus détaillées et représentent
+    plus précisément les conditions météorologiques à des échelles plus
+    petites.
+  </p>
 
-    <h2 class="heading__primary">Traitement des données</h2>
-    <p class="text__primary">
-      Pour le traitement de données nous avons pris une architecture de project
-      très modulaire afin de bien séparé la partie "<em>fetching</em>" des
-      données, de la partie "<em>traitement</em>" des données.
-    </p>
-    <p class="text__primary">
-      Nous avons crée des fetcheurs pour récupérer les données sur la pollution
-      et sur la météo de manière succinte et claire. Une partie du traitement
-      des données est effectuée dans les scripts de récupération. La
-      classe de base dans
-      <code>api.py</code> contient des méthodes communes pour traiter les
-      réponses d'API. Les classes spécialisées dans
-      <code>pollution_api.py</code> et <code>weather_api.py</code> implémentent
-      des méthodes spécifiques à chaque type de données.
-    </p>
-    <p class="text__primary">
-      Enfin nous avons un script <code>local_data.py</code> qui permet
-      simplement de prétraiter les données avant de les fournir aux algorithmes
-      de
-      <code>scikit-learn</code>, et de les stocker localement pour éviter les
-      limites d'API de nos fournisseurs de données. A terme, ce script pourrait
-      aussi découper les requêtes en plusieurs, étalées sur plusieurs jours,
-      pour contourner ces limites.
-    </p>
+  <h2 class="heading__primary">Diagramme temporel</h2>
+  <div style="position: relative; text-align: center;">
+    <svg style="max-width: 100%;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      contentStyleType="text/css" height="558px" preserveAspectRatio="none"
+      style="width:988px;height:558px;background:#FFFFFF;" version="1.1" viewBox="0 0 988 558" width="988px"
+      zoomAndPan="magnify">
+      <defs />
+      <g>
+        <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="77.5" x2="77.5" y1="36.2969"
+          y2="522.2891" />
+        <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="229.5" x2="229.5" y1="36.2969"
+          y2="522.2891" />
+        <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="339" x2="339" y1="36.2969"
+          y2="522.2891" />
+        <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="502" x2="502" y1="36.2969"
+          y2="522.2891" />
+        <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="673" x2="673" y1="36.2969"
+          y2="522.2891" />
+        <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="795.5" x2="795.5" y1="36.2969"
+          y2="522.2891" />
+        <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="904.5" x2="904.5" y1="36.2969"
+          y2="522.2891" />
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="145"
+          x="5" y="5" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="131" x="12" y="24.9951">OpenWeatherMap</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100"
+          x="179.5" y="5" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="86" x="186.5" y="24.9951">PollutionAPI</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99"
+          x="289.5" y="5" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="85" x="296.5" y="24.9951">OpenMeteo</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99"
+          x="452.5" y="5" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="85" x="459.5" y="24.9951">WeatherAPI</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="140"
+          x="603" y="5" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="126" x="610" y="24.9951">PositionOffsetter</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="85"
+          x="753" y="5" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="71" x="760" y="24.9951">LocalData</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="73"
+          x="868" y="5" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="59" x="875" y="24.9951">SKLearn</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="145"
+          x="5" y="522.2891" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="131" x="12" y="542.2842">OpenWeatherMap</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100"
+          x="179.5" y="522.2891" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="86" x="186.5" y="542.2842">PollutionAPI</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99"
+          x="289.5" y="522.2891" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="85" x="296.5" y="542.2842">OpenMeteo</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99"
+          x="452.5" y="522.2891" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="85" x="459.5" y="542.2842">WeatherAPI</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="140"
+          x="603" y="522.2891" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="126" x="610" y="542.2842">PositionOffsetter</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="85"
+          x="753" y="522.2891" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="71" x="760" y="542.2842">LocalData</text>
+        <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="73"
+          x="868" y="522.2891" /><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+          textLength="59" x="875" y="542.2842">SKLearn</text>
+        <polygon fill="#181818" points="88.5,61.4297,78.5,65.4297,88.5,69.4297,84.5,65.4297"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="82.5" x2="228.5" y1="65.4297"
+          y2="65.4297" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="99" x="94.5" y="60.3638">get air pollution</text>
+        <polygon fill="#181818" points="350,61.4297,340,65.4297,350,69.4297,346,65.4297"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="344" x2="501" y1="65.4297"
+          y2="65.4297" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="139" x="356" y="60.3638">get historical weather</text>
+        <polygon fill="#181818" points="217.5,90.5625,227.5,94.5625,217.5,98.5625,221.5,94.5625"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="77.5" x2="223.5" y1="94.5625"
+          y2="94.5625" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="97" x="84.5" y="89.4966">return pollution</text>
+        <polygon fill="#181818" points="490,90.5625,500,94.5625,490,98.5625,494,94.5625"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="339" x2="496" y1="94.5625"
+          y2="94.5625" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="96" x="346" y="89.4966">return weather</text>
+        <polygon fill="#181818" points="661,134.8281,671,138.8281,661,142.8281,665,138.8281"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="502" x2="667" y1="138.8281"
+          y2="138.8281" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="147" x="509" y="118.6294">(wind_speed, wind_dir)</text><text fill="#000000"
+          font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="106" x="513" y="133.7622">get new
+          position</text>
+        <polygon fill="#181818" points="513,163.9609,503,167.9609,513,171.9609,509,167.9609"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="507" x2="672" y1="167.9609"
+          y2="167.9609" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="124" x="519" y="162.895">return new position</text>
+        <polygon fill="#181818" points="240.5,193.0938,230.5,197.0938,240.5,201.0938,236.5,197.0938"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="234.5" x2="501" y1="197.0938"
+          y2="197.0938" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="181" x="246.5" y="192.0278">get pollution at new position</text>
+        <polygon fill="#181818" points="88.5,222.2266,78.5,226.2266,88.5,230.2266,84.5,226.2266"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="82.5" x2="228.5" y1="226.2266"
+          y2="226.2266" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="110" x="94.5" y="221.1606">get new pollution</text>
+        <polygon fill="#181818" points="217.5,251.3594,227.5,255.3594,217.5,259.3594,221.5,255.3594"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="77.5" x2="223.5" y1="255.3594"
+          y2="255.3594" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="128" x="84.5" y="250.2935">return new pollution</text>
+        <path d="M213.5,267.3594 L283.5,267.3594 L283.5,274.4922 L273.5,284.4922 L213.5,284.4922 L213.5,267.3594 "
+          fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;" />
+        <rect fill="none" height="85.3984" style="stroke:#000000;stroke-width:1.5;" width="598" x="213.5"
+          y="267.3594" /><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold"
+          lengthAdjust="spacing" textLength="25" x="228.5" y="280.4263">par</text>
+        <polygon fill="#181818" points="783.5,311.625,793.5,315.625,783.5,319.625,787.5,315.625"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="502" x2="789.5" y1="315.625"
+          y2="315.625" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="88" x="509" y="310.5591">save weather</text>
+        <polygon fill="#181818" points="783.5,340.7578,793.5,344.7578,783.5,348.7578,787.5,344.7578"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="229.5" x2="789.5" y1="344.7578"
+          y2="344.7578" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="89" x="236.5" y="339.6919">save pollution</text>
+        <path d="M779.5,370.7578 L849.5,370.7578 L849.5,377.8906 L839.5,387.8906 L779.5,387.8906 L779.5,370.7578 "
+          fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;" />
+        <rect fill="none" height="85.3984" style="stroke:#000000;stroke-width:1.5;" width="141" x="779.5"
+          y="370.7578" /><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold"
+          lengthAdjust="spacing" textLength="25" x="794.5" y="383.8247">par</text>
+        <polygon fill="#181818" points="892.5,415.0234,902.5,419.0234,892.5,423.0234,896.5,419.0234"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="795.5" x2="898.5" y1="419.0234"
+          y2="419.0234" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="84" x="802.5" y="413.9575">load weather</text>
+        <polygon fill="#181818" points="892.5,444.1563,902.5,448.1563,892.5,452.1563,896.5,448.1563"
+          style="stroke:#181818;stroke-width:1.0;" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="795.5" x2="898.5" y1="448.1563"
+          y2="448.1563" /><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+          textLength="85" x="802.5" y="443.0903">load pollution</text>
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="904.5" x2="946.5" y1="491.2891"
+          y2="491.2891" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="946.5" x2="946.5" y1="491.2891"
+          y2="504.2891" />
+        <line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="905.5" x2="946.5" y1="504.2891"
+          y2="504.2891" />
+        <polygon fill="#181818" points="915.5,500.2891,905.5,504.2891,915.5,508.2891,911.5,504.2891"
+          style="stroke:#181818;stroke-width:1.0;" /><text fill="#000000" font-family="sans-serif" font-size="13"
+          lengthAdjust="spacing" textLength="70" x="911.5" y="486.2231">calling
+          KNN</text><!--SRC=[XPBDIiKm48NtVOfn8mhs1O88WXkvl-32ZI23cTiRo4t2P6h1fxVDxNyhxaBcVETCJtCJ68iBWf3_0U6IiaCWzqueP-8T1dZCSpXwQqintZqVNnKK98268NItsMt3xAZsIFAMxiLd4yMp-K8BrNKq3ydpfra8avJirZCQzJYZrNRUmwZrZQPnE9nEaKI8rLrbdFwCWKW_G3fhm_SVBYthgAfJhqYsOF_A7bEmt61UN_zPW8l4GPlWQLDgj6FNp7zTJbRie82BehQ-_aClAAWWuZVrVVRtAsyX2GTNSZev3qXZ_BRP4h9JO3tg5TkbPkhOpgQw6hR65R3Pxty1]-->
+      </g>
+    </svg>
+  </div>
 
-    <h2 class="heading__primary">Premiers algorithmes codés</h2>
-    <p class="text__primary">
-      Dans le jeu de données utilisé, nous avons souhaité fournir les quantités
-      de différents polluants en amont du vent. Afin de pouvoir réaliser cela,
-      il a fallu, pour chaque heure, récupérer la vitesse du vent et sa
-      direction. Ces données sont utilisées pour calculer la position de
-      l'amont du vent à partir de laquelle les polluants sont arrivés. Ces
-      coordonnées seront ensuite utilisées pour récupérer, grâce à
-      OpenWeatherMap, les données de pollution à cette position.
-      
-    </p>
+  <h2 class="heading__primary">Gestion du vent</h2>
+  <p class="text__primary" style="margin-bottom: 3rem;">
+    Pour la gestion du vent, nous avons utilisé la direction du vent et sa
+    vitesse pour prendre en compte les polluants 24h en amont du vent. Nous n'avons pas trouvé de littérature concernant
+    le déplacement de particules selon la vitesse du vent. Par essai et erreur, après essai de plusieurs coefficients,
+    nous avons trouvé qu'un coefficient de 0,5 (i.e. les particules vont à la moitié de la vitesse du vent) donnait de
+    bons résultats.
+  </p>
+  <div style="display: grid; place-items: center;">
+    <img
+      src="https://media.discordapp.net/attachments/1158323140666081330/1183408190835130478/poc.png?ex=658839c3&is=6575c4c3&hm=50fa0ea3eb0c73a45174e17fb7d80222f76a9a82570579d573d96681c6af3fd2&=&format=webp&quality=lossless&width=885&height=702"
+      style="max-width: 80%;" />
+  </div>
 
-    <h2 class="heading__primary">Diagramme temporel</h2>
-    <div style="position: relative; text-align: center;">
-    <svg style="max-width: 100%;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="558px" preserveAspectRatio="none" style="width:988px;height:558px;background:#FFFFFF;" version="1.1" viewBox="0 0 988 558" width="988px" zoomAndPan="magnify"><defs/><g><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="77.5" x2="77.5" y1="36.2969" y2="522.2891"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="229.5" x2="229.5" y1="36.2969" y2="522.2891"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="339" x2="339" y1="36.2969" y2="522.2891"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="502" x2="502" y1="36.2969" y2="522.2891"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="673" x2="673" y1="36.2969" y2="522.2891"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="795.5" x2="795.5" y1="36.2969" y2="522.2891"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="904.5" x2="904.5" y1="36.2969" y2="522.2891"/><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="145" x="5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="131" x="12" y="24.9951">OpenWeatherMap</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100" x="179.5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86" x="186.5" y="24.9951">PollutionAPI</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99" x="289.5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="296.5" y="24.9951">OpenMeteo</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99" x="452.5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="459.5" y="24.9951">WeatherAPI</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="140" x="603" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="610" y="24.9951">PositionOffsetter</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="85" x="753" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="760" y="24.9951">LocalData</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="73" x="868" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59" x="875" y="24.9951">SKLearn</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="145" x="5" y="522.2891"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="131" x="12" y="542.2842">OpenWeatherMap</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100" x="179.5" y="522.2891"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86" x="186.5" y="542.2842">PollutionAPI</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99" x="289.5" y="522.2891"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="296.5" y="542.2842">OpenMeteo</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99" x="452.5" y="522.2891"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="459.5" y="542.2842">WeatherAPI</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="140" x="603" y="522.2891"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="610" y="542.2842">PositionOffsetter</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="85" x="753" y="522.2891"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="760" y="542.2842">LocalData</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="73" x="868" y="522.2891"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59" x="875" y="542.2842">SKLearn</text><polygon fill="#181818" points="88.5,61.4297,78.5,65.4297,88.5,69.4297,84.5,65.4297" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="82.5" x2="228.5" y1="65.4297" y2="65.4297"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="99" x="94.5" y="60.3638">get air pollution</text><polygon fill="#181818" points="350,61.4297,340,65.4297,350,69.4297,346,65.4297" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="344" x2="501" y1="65.4297" y2="65.4297"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="139" x="356" y="60.3638">get historical weather</text><polygon fill="#181818" points="217.5,90.5625,227.5,94.5625,217.5,98.5625,221.5,94.5625" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="77.5" x2="223.5" y1="94.5625" y2="94.5625"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="97" x="84.5" y="89.4966">return pollution</text><polygon fill="#181818" points="490,90.5625,500,94.5625,490,98.5625,494,94.5625" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="339" x2="496" y1="94.5625" y2="94.5625"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="96" x="346" y="89.4966">return weather</text><polygon fill="#181818" points="661,134.8281,671,138.8281,661,142.8281,665,138.8281" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="502" x2="667" y1="138.8281" y2="138.8281"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="147" x="509" y="118.6294">(wind_speed, wind_dir)</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="106" x="513" y="133.7622">get new position</text><polygon fill="#181818" points="513,163.9609,503,167.9609,513,171.9609,509,167.9609" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="507" x2="672" y1="167.9609" y2="167.9609"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124" x="519" y="162.895">return new position</text><polygon fill="#181818" points="240.5,193.0938,230.5,197.0938,240.5,201.0938,236.5,197.0938" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="234.5" x2="501" y1="197.0938" y2="197.0938"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="181" x="246.5" y="192.0278">get pollution at new position</text><polygon fill="#181818" points="88.5,222.2266,78.5,226.2266,88.5,230.2266,84.5,226.2266" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="82.5" x2="228.5" y1="226.2266" y2="226.2266"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="110" x="94.5" y="221.1606">get new pollution</text><polygon fill="#181818" points="217.5,251.3594,227.5,255.3594,217.5,259.3594,221.5,255.3594" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="77.5" x2="223.5" y1="255.3594" y2="255.3594"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="128" x="84.5" y="250.2935">return new pollution</text><path d="M213.5,267.3594 L283.5,267.3594 L283.5,274.4922 L273.5,284.4922 L213.5,284.4922 L213.5,267.3594 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;"/><rect fill="none" height="85.3984" style="stroke:#000000;stroke-width:1.5;" width="598" x="213.5" y="267.3594"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="25" x="228.5" y="280.4263">par</text><polygon fill="#181818" points="783.5,311.625,793.5,315.625,783.5,319.625,787.5,315.625" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="502" x2="789.5" y1="315.625" y2="315.625"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="88" x="509" y="310.5591">save weather</text><polygon fill="#181818" points="783.5,340.7578,793.5,344.7578,783.5,348.7578,787.5,344.7578" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="229.5" x2="789.5" y1="344.7578" y2="344.7578"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="89" x="236.5" y="339.6919">save pollution</text><path d="M779.5,370.7578 L849.5,370.7578 L849.5,377.8906 L839.5,387.8906 L779.5,387.8906 L779.5,370.7578 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;"/><rect fill="none" height="85.3984" style="stroke:#000000;stroke-width:1.5;" width="141" x="779.5" y="370.7578"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="25" x="794.5" y="383.8247">par</text><polygon fill="#181818" points="892.5,415.0234,902.5,419.0234,892.5,423.0234,896.5,419.0234" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="795.5" x2="898.5" y1="419.0234" y2="419.0234"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="84" x="802.5" y="413.9575">load weather</text><polygon fill="#181818" points="892.5,444.1563,902.5,448.1563,892.5,452.1563,896.5,448.1563" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="795.5" x2="898.5" y1="448.1563" y2="448.1563"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="85" x="802.5" y="443.0903">load pollution</text><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="904.5" x2="946.5" y1="491.2891" y2="491.2891"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="946.5" x2="946.5" y1="491.2891" y2="504.2891"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="905.5" x2="946.5" y1="504.2891" y2="504.2891"/><polygon fill="#181818" points="915.5,500.2891,905.5,504.2891,915.5,508.2891,911.5,504.2891" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70" x="911.5" y="486.2231">calling KNN</text><!--SRC=[XPBDIiKm48NtVOfn8mhs1O88WXkvl-32ZI23cTiRo4t2P6h1fxVDxNyhxaBcVETCJtCJ68iBWf3_0U6IiaCWzqueP-8T1dZCSpXwQqintZqVNnKK98268NItsMt3xAZsIFAMxiLd4yMp-K8BrNKq3ydpfra8avJirZCQzJYZrNRUmwZrZQPnE9nEaKI8rLrbdFwCWKW_G3fhm_SVBYthgAfJhqYsOF_A7bEmt61UN_zPW8l4GPlWQLDgj6FNp7zTJbRie82BehQ-_aClAAWWuZVrVVRtAsyX2GTNSZev3qXZ_BRP4h9JO3tg5TkbPkhOpgQw6hR65R3Pxty1]--></g></svg>
-    </div>
-  </body>
+  <h2 class="heading__primary">Proof of concept</h2>
+  <p class="text__primary" style="margin-bottom: 3rem;">
+    Nous avons essayé de prédire la qualité de l'air à partir de la pollution en utilisant une faible quantité de
+    données d'entraînement (28 jours). De plus, la gestion de la pollution en amont du vent n'est pas complète : la direction du
+    vent est considérée comme constante au cours du temps. Cela nous permet de rapidement tester notre modèle.
+  </p>
+
+  <div style="display: grid; place-items: center;">
+    <img
+      src="https://cdn.discordapp.com/attachments/1158323140666081330/1184122584976080916/image.png?ex=658ad318&is=65785e18&hm=2bc337200780f062ebcf377746e6e987e52b351b88b604b59d19e1c6538b244e"
+      style="max-width: 80%;" />
+  </div>
+</body>
+
 </html>
